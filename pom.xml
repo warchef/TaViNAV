@@ -7,10 +7,92 @@
     <groupId>hu.warchef.nav</groupId>
     <artifactId>TaViNAV</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <jaxb-api.version>2.3.0</jaxb-api.version>
+        <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
+        <jakarta-activation.version>1.2.1</jakarta-activation.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+        <cxf-xjc-plugin.version>3.3.0</cxf-xjc-plugin.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb-runtime.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>jakarta.activation</artifactId>
+            <version>${jakarta-activation.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>--illegal-access=permit</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-xjc-plugin</artifactId>
+                <version>${cxf-xjc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xsdtojava</goal>
+                        </goals>
+                        <configuration>
+                            <sourceRoot>${basedir}\src\main\java</sourceRoot>
+                            <xsdOptions>
+                                <xsdOption>
+                                    <xsdDir>${basedir}\src\main\resources\xsd\delta</xsdDir>
+                                    <packagename>hu.warchef.nav.domain.delta</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsdDir>${basedir}\src\main\resources\xsd\charlie</xsdDir>
+                                    <packagename>hu.warchef.nav.domain.charlie</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsdDir>${basedir}\src\main\resources\xsd\bravo</xsdDir>
+                                    <packagename>hu.warchef.nav.domain.bravo</packagename>
+                                </xsdOption>
+                                <xsdOption>
+                                    <xsdDir>${basedir}\src\main\resources\xsd\alpha</xsdDir>
+                                    <packagename>hu.warchef.nav.domain.alpha</packagename>
+                                </xsdOption>
+                            </xsdOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
